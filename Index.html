@@ -1,0 +1,2549 @@
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5865F2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<title>FlameNet</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{
+    margin:0;
+    min-height:100%;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+    background:#090b10;
+    color:#fff;
+}
+body{overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer}
+button:active{transform:scale(.98)}
+
+.hidden{display:none!important}
+
+:root{
+    --bg:#090b10;
+    --panel:#151821;
+    --panel2:#1b1f29;
+    --border:#2a2f3d;
+    --text:#fff;
+    --muted:#8d94a5;
+    --blue:#5865f2;
+    --green:#42d77d;
+    --red:#ed6472;
+    --gold:#ffc861;
+}
+
+/* AUTH */
+
+#auth{
+    min-height:100vh;
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+    background:
+        radial-gradient(circle at 20% 20%,#5865f230,transparent 35%),
+        radial-gradient(circle at 80% 80%,#9b5cff20,transparent 35%),
+        var(--bg);
+}
+
+.authBox{
+    width:min(430px,100%);
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:28px;
+    box-shadow:0 25px 80px #0008;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:900;
+    letter-spacing:-1.5px;
+}
+
+.logoSub{
+    color:var(--muted);
+    margin-top:4px;
+    margin-bottom:24px;
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:18px;
+}
+
+.tabs button{
+    flex:1;
+    border:0;
+    border-radius:12px;
+    padding:12px;
+    background:var(--panel2);
+    color:var(--muted);
+}
+
+.tabs button.active{
+    background:var(--blue);
+    color:#fff;
+}
+
+.field{
+    margin-bottom:14px;
+}
+
+.field label{
+    display:block;
+    color:#b8bdc9;
+    font-size:13px;
+    margin-bottom:6px;
+}
+
+input,textarea,select{
+    width:100%;
+    background:#0f1117;
+    color:#fff;
+    border:1px solid #303544;
+    border-radius:12px;
+    padding:13px;
+    outline:none;
+}
+
+input:focus,textarea:focus,select:focus{
+    border-color:var(--blue);
+}
+
+textarea{
+    min-height:110px;
+    resize:vertical;
+}
+
+.primary{
+    width:100%;
+    background:var(--blue);
+    color:#fff;
+    border:0;
+    border-radius:13px;
+    padding:14px;
+    font-weight:800;
+}
+
+.status{
+    color:var(--red);
+    font-size:13px;
+    margin-top:12px;
+}
+
+/* APP */
+
+#app{
+    min-height:100vh;
+}
+
+.topbar{
+    position:sticky;
+    top:0;
+    z-index:100;
+    height:64px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:0 18px;
+    background:#10131af2;
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid #252a37;
+}
+
+.topLogo{
+    font-size:20px;
+    font-weight:900;
+}
+
+.searchBox{
+    flex:1;
+    max-width:520px;
+}
+
+.searchBox input{
+    padding:10px 13px;
+    background:#1a1e27;
+}
+
+.accountBtn{
+    margin-left:auto;
+    background:#1b1f29;
+    color:#fff;
+    border:0;
+    border-radius:12px;
+    padding:9px 13px;
+}
+
+.layout{
+    width:min(1450px,100%);
+    margin:auto;
+    display:grid;
+    grid-template-columns:220px minmax(0,720px) 260px;
+    gap:20px;
+    padding:22px;
+}
+
+.sidebar,.rightbar{
+    position:sticky;
+    top:84px;
+    align-self:start;
+}
+
+.nav{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+.nav button{
+    background:transparent;
+    color:#9ba1af;
+    border:0;
+    text-align:left;
+    padding:12px;
+    border-radius:11px;
+}
+
+.nav button:hover,
+.nav button.active{
+    background:#1c202a;
+    color:#fff;
+}
+
+.card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
+}
+
+.cardTitle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.card h2,.card h3{
+    margin-top:0;
+}
+
+.smallBtn{
+    background:#20242f;
+    color:#c8ccd5;
+    border:0;
+    border-radius:10px;
+    padding:8px 11px;
+}
+
+.smallBtn:hover{
+    background:#292e3b;
+}
+
+/* FEED */
+
+.feedItem{
+    padding:16px 0;
+    border-bottom:1px solid #292e38;
+}
+
+.feedItem:last-child{
+    border-bottom:0;
+}
+
+.author{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-weight:800;
+}
+
+.avatar{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#5865f2,#a855f7);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:900;
+    flex-shrink:0;
+}
+
+.feedTime{
+    color:#737a8b;
+    font-size:11px;
+    font-weight:400;
+}
+
+.feedText{
+    color:#d4d7df;
+    line-height:1.5;
+    margin-top:10px;
+}
+
+/* PROFILE */
+
+.profileHead{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.profileAvatar{
+    width:76px;
+    height:76px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#5865f2,#a855f7);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:28px;
+    font-weight:900;
+}
+
+.profileName{
+    font-size:25px;
+    font-weight:900;
+}
+
+.badges{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:7px;
+}
+
+.badge{
+    padding:5px 8px;
+    border-radius:7px;
+    background:#252a36;
+    color:#bbb;
+    font-size:10px;
+    font-weight:800;
+}
+
+.badge.mod{
+    background:#493a22;
+    color:#ffc861;
+}
+
+.badge.quote{
+    background:#263e53;
+    color:#73c8ff;
+}
+
+.badge.owner{
+    background:#482542;
+    color:#ff8fd9;
+}
+
+/* USERS */
+
+.userResult{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px;
+    background:#1a1e27;
+    border-radius:12px;
+    margin-top:8px;
+}
+
+.userInfo{
+    flex:1;
+}
+
+.userName{
+    font-weight:800;
+}
+
+.userId{
+    color:#737a8b;
+    font-size:11px;
+}
+
+/* RIGHT */
+
+.sideTitle{
+    color:#737a8b;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.1em;
+    margin-bottom:9px;
+}
+
+.quote{
+    font-size:17px;
+    line-height:1.45;
+    font-weight:750;
+}
+
+.newsItem{
+    padding:10px 0;
+    border-bottom:1px solid #292e38;
+}
+
+.newsItem:last-child{
+    border-bottom:0;
+}
+
+/* MOD */
+
+.modPanel{
+    border-color:#5d4826;
+    background:linear-gradient(135deg,#1e1a12,#171820);
+}
+
+.modTitle{
+    color:var(--gold);
+    font-weight:900;
+}
+
+.toolGrid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:9px;
+    margin-top:15px;
+}
+
+.tool{
+    background:#20242f;
+    color:#fff;
+    border:0;
+    border-radius:12px;
+    padding:14px;
+    text-align:left;
+}
+
+.tool strong{
+    display:block;
+}
+
+.tool span{
+    display:block;
+    color:#858c9c;
+    font-size:11px;
+    margin-top:4px;
+}
+
+.tool:hover{
+    background:#292e3b;
+}
+
+/* MOBILE */
+
+.mobileNav{
+    display:none;
+}
+
+@media(max-width:1050px){
+    .layout{
+        grid-template-columns:190px minmax(0,1fr);
+    }
+
+    .rightbar{
+        display:none;
+    }
+}
+
+@media(max-width:700px){
+    .topbar{
+        padding:0 10px;
+    }
+
+    .topLogo{
+        display:none;
+    }
+
+    .searchBox{
+        max-width:none;
+    }
+
+    .accountBtn{
+        margin-left:0;
+    }
+
+    .layout{
+        display:block;
+        padding:12px;
+        padding-bottom:82px;
+    }
+
+    .sidebar{
+        display:none;
+    }
+
+    .mobileNav{
+        display:flex;
+        position:fixed;
+        z-index:200;
+        left:0;
+        right:0;
+        bottom:0;
+        min-height:64px;
+        padding-bottom:env(safe-area-inset-bottom);
+        background:#10131af5;
+        backdrop-filter:blur(18px);
+        border-top:1px solid #292e38;
+        justify-content:space-around;
+    }
+
+    .mobileNav button{
+        flex:1;
+        background:transparent;
+        color:#8d94a4;
+        border:0;
+        font-size:11px;
+        padding:7px 2px;
+    }
+
+    .mobileNav button:hover{
+        color:#fff;
+    }
+
+    .card{
+        border-radius:15px;
+        padding:15px;
+    }
+
+    .toolGrid{
+        grid-template-columns:1fr;
+    }
+
+    .authBox{
+        padding:22px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- =====================================================
+     LOGIN / SIGN UP
+===================================================== -->
+
+<section id="auth">
+
+<div class="authBox">
+
+    <div class="logo">FlameNet</div>
+
+    <div class="logoSub">
+        Your game community.
+    </div>
+
+    <div class="tabs">
+
+        <button id="loginTab"
+                class="active"
+                onclick="showAuth('login')">
+            Sign In
+        </button>
+
+        <button id="signupTab"
+                onclick="showAuth('signup')">
+            Sign Up
+        </button>
+
+    </div>
+
+
+    <form id="loginForm"
+          onsubmit="login(event)">
+
+        <div class="field">
+            <label>Username</label>
+            <input id="loginUsername"
+                   autocomplete="username"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Password</label>
+            <input id="loginPassword"
+                   type="password"
+                   autocomplete="current-password"
+                   required>
+        </div>
+
+        <button class="primary">
+            Sign In
+        </button>
+
+    </form>
+
+
+    <form id="signupForm"
+          class="hidden"
+          onsubmit="signup(event)">
+
+        <div class="field">
+            <label>Username</label>
+            <input id="signupUsername"
+                   minlength="3"
+                   maxlength="20"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Email</label>
+            <input id="signupEmail"
+                   type="email"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Password</label>
+            <input id="signupPassword"
+                   type="password"
+                   minlength="6"
+                   required>
+        </div>
+
+        <div class="field">
+            <label>Display Name</label>
+            <input id="signupDisplayName"
+                   maxlength="25"
+                   required>
+        </div>
+
+        <button class="primary">
+            Create Account
+        </button>
+
+    </form>
+
+    <div id="authStatus"
+         class="status"></div>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     MAIN APP
+===================================================== -->
+
+<section id="app"
+         class="hidden">
+
+<header class="topbar">
+
+    <div class="topLogo">
+        FlameNet
+    </div>
+
+    <div class="searchBox">
+
+        <input id="globalSearch"
+               placeholder="Search users..."
+               onkeydown="
+               if(event.key==='Enter')
+               searchUsers();
+               ">
+
+    </div>
+
+    <button class="accountBtn"
+            onclick="showPage('profile')">
+
+        <span id="topUsername">
+            Account
+        </span>
+
+    </button>
+
+</header>
+
+
+<div class="layout">
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+    <div class="nav">
+
+        <button class="active"
+                onclick="showPage('home')">
+            🏠 Home
+        </button>
+
+        <button onclick="showPage('friends')">
+            👥 Friends
+        </button>
+
+        <button onclick="showPage('search')">
+            🔎 Discover
+        </button>
+
+        <button onclick="showPage('profile')">
+            👤 Profile
+        </button>
+
+        <button id="modNav"
+                class="hidden"
+                onclick="showPage('moderator')">
+            🛡️ Moderator
+        </button>
+
+        <button onclick="showPage('settings')">
+            ⚙️ Settings
+        </button>
+
+        <button onclick="logout()">
+            🚪 Sign Out
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- MAIN -->
+
+<main>
+
+<!-- HOME -->
+
+<section id="pageHome">
+
+<div class="card">
+
+    <div class="cardTitle">
+
+        <h2>Home</h2>
+
+        <button class="smallBtn"
+                onclick="loadHome()">
+            Refresh
+        </button>
+
+    </div>
+
+    <div id="feed">
+
+        <div class="feedItem">
+
+            <div class="author">
+
+                <div class="avatar">
+                    F
+                </div>
+
+                <div>
+                    FlameNet
+
+                    <div class="feedTime">
+                        Welcome
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="feedText">
+                Welcome to FlameNet!
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h3>📰 Latest News</h3>
+
+    <div id="newsFeed">
+        Loading...
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- FRIENDS -->
+
+<section id="pageFriends"
+         class="hidden">
+
+<div class="card">
+
+    <h2>👥 Friends & Following</h2>
+
+    <div id="friendsList">
+        Loading...
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- SEARCH -->
+
+<section id="pageSearch"
+         class="hidden">
+
+<div class="card">
+
+    <h2>🔎 Discover Users</h2>
+
+    <div class="field">
+
+        <input id="userSearch"
+               placeholder="Enter username..."
+               onkeydown="
+               if(event.key==='Enter')
+               searchUsers();
+               ">
+
+    </div>
+
+    <button class="primary"
+            onclick="searchUsers()">
+        Search
+    </button>
+
+    <div id="searchResults"></div>
+
+</div>
+
+</section>
+
+
+<!-- PROFILE -->
+
+<section id="pageProfile"
+         class="hidden">
+
+<div class="card">
+
+    <div class="profileHead">
+
+        <div id="profileAvatar"
+             class="profileAvatar">
+            ?
+        </div>
+
+        <div>
+
+            <div id="profileName"
+                 class="profileName">
+                Player
+            </div>
+
+            <div id="profileUsername"
+                 style="color:#858c9c">
+                @player
+            </div>
+
+            <div id="profileBadges"
+                 class="badges">
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <h3>About</h3>
+
+    <div id="profileBio"
+         style="color:#9ca2b0">
+        No bio yet.
+    </div>
+
+</div>
+
+</section>
+
+
+<!-- MODERATOR -->
+
+<section id="pageModerator"
+         class="hidden">
+
+<div class="card modPanel">
+
+    <div class="cardTitle">
+
+        <div class="modTitle">
+            🛡️ Moderator Center
+        </div>
+
+        <span id="roleBadge"
+              class="badge mod">
+            MODERATOR
+        </span>
+
+    </div>
+
+    <p style="color:#aaa">
+        Tools available to your PlayFab account.
+    </p>
+
+
+    <div class="toolGrid">
+
+        <button class="tool"
+                onclick="openPanel('grant')">
+            🎁
+            <strong>Grant Item</strong>
+            <span>
+                Grant an item to a player.
+            </span>
+        </button>
+
+        <button class="tool"
+                onclick="openPanel('revoke')">
+            🗑️
+            <strong>Revoke Item</strong>
+            <span>
+                Remove an item.
+            </span>
+        </button>
+
+        <button class="tool"
+                onclick="openPanel('moderation')">
+            🔨
+            <strong>User Moderation</strong>
+            <span>
+                Manage player moderation.
+            </span>
+        </button>
+
+        <button class="tool"
+                onclick="openPanel('news')">
+            📰
+            <strong>News Manager</strong>
+            <span>
+                Publish site/game news.
+            </span>
+        </button>
+
+        <button id="quoteTool"
+                class="tool hidden"
+                onclick="openPanel('quote')">
+            💬
+            <strong>Set Quote</strong>
+            <span>
+                Change the Unity live quote.
+            </span>
+        </button>
+
+        <button id="ownerTool"
+                class="tool hidden"
+                onclick="openPanel('owner')">
+            👑
+            <strong>Owner Console</strong>
+            <span>
+                FLAME owner controls.
+            </span>
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- GRANT -->
+
+<div id="panelGrant"
+     class="card hidden">
+
+    <h3>🎁 Grant Item</h3>
+
+    <div class="field">
+        <label>Player</label>
+        <input id="grantPlayer"
+               placeholder="Username or PlayFab ID">
+    </div>
+
+    <div class="field">
+        <label>Item ID</label>
+        <input id="grantItem"
+               placeholder="ITEM_ID">
+    </div>
+
+    <button class="primary"
+            onclick="adminAction('grantItem')">
+        Grant Item
+    </button>
+
+    <div id="grantStatus"
+         class="status"></div>
+
+</div>
+
+
+<!-- REVOKE -->
+
+<div id="panelRevoke"
+     class="card hidden">
+
+    <h3>🗑️ Revoke Item</h3>
+
+    <div class="field">
+        <label>Player</label>
+        <input id="revokePlayer"
+               placeholder="Username or PlayFab ID">
+    </div>
+
+    <div class="field">
+        <label>Item Instance ID</label>
+        <input id="revokeInstance"
+               placeholder="INSTANCE_ID">
+    </div>
+
+    <button class="primary"
+            onclick="adminAction('revokeItem')">
+        Revoke Item
+    </button>
+
+    <div id="revokeStatus"
+         class="status"></div>
+
+</div>
+
+
+<!-- MODERATION -->
+
+<div id="panelModeration"
+     class="card hidden">
+
+    <h3>🔨 User Moderation</h3>
+
+    <div class="field">
+        <label>Player</label>
+        <input id="modPlayer">
+    </div>
+
+    <div class="field">
+        <label>Action</label>
+
+        <select id="modAction">
+
+            <option value="warn">
+                Warn
+            </option>
+
+            <option value="mute">
+                Mute
+            </option>
+
+            <option value="unmute">
+                Unmute
+            </option>
+
+            <option value="ban">
+                Ban
+            </option>
+
+            <option value="unban">
+                Unban
+            </option>
+
+        </select>
+
+    </div>
+
+    <div class="field">
+
+        <label>Reason</label>
+
+        <textarea id="modReason"
+                  placeholder="Reason..."></textarea>
+
+    </div>
+
+    <button class="primary"
+            onclick="adminAction('moderate')">
+        Apply
+    </button>
+
+    <div id="modStatus"
+         class="status"></div>
+
+</div>
+
+
+<!-- NEWS -->
+
+<div id="panelNews"
+     class="card hidden">
+
+    <h3>📰 News Manager</h3>
+
+    <div class="field">
+        <label>Title</label>
+        <input id="newsTitle">
+    </div>
+
+    <div class="field">
+        <label>Message</label>
+        <textarea id="newsMessage"></textarea>
+    </div>
+
+    <button class="primary"
+            onclick="adminAction('news')">
+        Publish News
+    </button>
+
+    <div id="newsStatus"
+         class="status"></div>
+
+</div>
+
+
+<!-- QUOTE -->
+
+<div id="panelQuote"
+     class="card hidden">
+
+    <h3>💬 Set Quote</h3>
+
+    <div class="field">
+
+        <label>
+            Unity quote / website quote
+        </label>
+
+        <textarea id="quoteText"
+                  placeholder="Type your quote..."></textarea>
+
+    </div>
+
+    <button class="primary"
+            onclick="adminAction('quote')">
+        Save Quote
+    </button>
+
+    <div style="margin-top:18px">
+
+        <label style="
+            display:block;
+            color:#858c9c;
+            font-size:12px;
+            margin-bottom:6px;
+        ">
+            Unity Link
+        </label>
+
+        <input id="unityQuoteLink"
+               readonly>
+
+        <button class="smallBtn"
+                style="margin-top:8px"
+                onclick="copyUnityLink()">
+            📋 Copy Link
+        </button>
+
+    </div>
+
+    <div id="quoteStatus"
+         class="status"></div>
+
+</div>
+
+
+<!-- OWNER -->
+
+<div id="panelOwner"
+     class="card hidden">
+
+    <h3>👑 FLAME Owner Console</h3>
+
+    <p style="color:#9ca2b0">
+        Owner-only controls.
+    </p>
+
+    <div class="toolGrid">
+
+        <button class="tool"
+                onclick="ownerAction('audit')">
+            📋
+            <strong>Audit Log</strong>
+            <span>View moderator activity.</span>
+        </button>
+
+        <button class="tool"
+                onclick="ownerAction('refresh')">
+            🔄
+            <strong>Refresh Roles</strong>
+            <span>Refresh role information.</span>
+        </button>
+
+        <button class="tool"
+                onclick="ownerAction('broadcast')">
+            📢
+            <strong>Broadcast</strong>
+            <span>Send an announcement.</span>
+        </button>
+
+        <button class="tool"
+                onclick="ownerAction('maintenance')">
+            🔧
+            <strong>Maintenance</strong>
+            <span>Website maintenance controls.</span>
+        </button>
+
+    </div>
+
+    <div id="ownerStatus"
+         class="status"></div>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+
+<section id="pageSettings"
+         class="hidden">
+
+<div class="card">
+
+    <h2>⚙️ Settings</h2>
+
+    <div class="field">
+        <label>Display Name</label>
+        <input id="settingsName">
+    </div>
+
+    <div class="field">
+        <label>Bio</label>
+        <textarea id="settingsBio"></textarea>
+    </div>
+
+    <button class="primary"
+            onclick="saveSettings()">
+        Save Changes
+    </button>
+
+    <div id="settingsStatus"
+         class="status"></div>
+
+</div>
+
+</section>
+
+</main>
+
+
+<!-- RIGHT -->
+
+<aside class="rightbar">
+
+<div class="card">
+
+    <div class="sideTitle">
+        LIVE QUOTE
+    </div>
+
+    <div id="sideQuote"
+         class="quote">
+        Welcome to FlameNet.
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="sideTitle">
+        ACCOUNT
+    </div>
+
+    <div id="sideAccount">
+        Loading...
+    </div>
+
+</div>
+
+</aside>
+
+</div>
+
+
+<!-- MOBILE -->
+
+<nav class="mobileNav">
+
+    <button onclick="showPage('home')">
+        🏠<br>Home
+    </button>
+
+    <button onclick="showPage('friends')">
+        👥<br>Friends
+    </button>
+
+    <button onclick="showPage('search')">
+        🔎<br>Search
+    </button>
+
+    <button onclick="showPage('profile')">
+        👤<br>Profile
+    </button>
+
+    <button id="mobileMod"
+            class="hidden"
+            onclick="showPage('moderator')">
+        🛡️<br>Mod
+    </button>
+
+</nav>
+
+</section>
+
+
+<script>
+/* =====================================================
+   FLAMENET CONFIG
+===================================================== */
+
+const PLAYFAB_TITLE_ID = "112CBA";
+
+const API_BASE = "/api";
+
+let sessionTicket = null;
+let currentUser = null;
+
+let role = "user";
+
+let hasMODC = false;
+let hasLIAMQ = false;
+let hasFLAME = false;
+
+
+/* =====================================================
+   PLAYFAB CLIENT API
+===================================================== */
+
+function playfabURL(endpoint){
+
+    return "https://" +
+        PLAYFAB_TITLE_ID +
+        ".playfabapi.com/Client/" +
+        endpoint;
+}
+
+
+async function playfab(endpoint,body={}){
+
+    const headers={
+        "Content-Type":"application/json"
+    };
+
+    if(sessionTicket){
+        headers["X-Authorization"]=
+            sessionTicket;
+    }
+
+    const response=
+        await fetch(
+            playfabURL(endpoint),
+            {
+                method:"POST",
+                headers,
+                body:JSON.stringify(body)
+            }
+        );
+
+    const data=
+        await response.json();
+
+    if(!response.ok ||
+       data.error){
+
+        throw new Error(
+            data.errorMessage ||
+            data.error ||
+            "PlayFab request failed."
+        );
+    }
+
+    return data;
+}
+
+
+/* =====================================================
+   AUTH
+===================================================== */
+
+function showAuth(type){
+
+    const login=
+        document.getElementById("loginForm");
+
+    const signup=
+        document.getElementById("signupForm");
+
+    const loginTab=
+        document.getElementById("loginTab");
+
+    const signupTab=
+        document.getElementById("signupTab");
+
+    if(type==="login"){
+
+        login.classList.remove("hidden");
+        signup.classList.add("hidden");
+
+        loginTab.classList.add("active");
+        signupTab.classList.remove("active");
+
+    }else{
+
+        login.classList.add("hidden");
+        signup.classList.remove("hidden");
+
+        loginTab.classList.remove("active");
+        signupTab.classList.add("active");
+
+    }
+
+    document.getElementById(
+        "authStatus"
+    ).textContent="";
+}
+
+
+async function login(event){
+
+    event.preventDefault();
+
+    const status=
+        document.getElementById("authStatus");
+
+    status.textContent="Signing in...";
+
+    try{
+
+        const username=
+            document.getElementById(
+                "loginUsername"
+            ).value.trim();
+
+        const password=
+            document.getElementById(
+                "loginPassword"
+            ).value;
+
+        const result=
+            await playfab(
+                "LoginWithPlayFab",
+                {
+                    Username:username,
+                    Password:password,
+
+                    InfoRequestParameters:{
+                        GetUserInventory:true,
+                        GetPlayerProfile:true,
+                        GetUserAccountInfo:true
+                    }
+                }
+            );
+
+        sessionTicket=
+            result.data.SessionTicket;
+
+        await loadUser();
+
+        openApp();
+
+    }catch(error){
+
+        status.textContent=
+            error.message;
+    }
+}
+
+
+async function signup(event){
+
+    event.preventDefault();
+
+    const status=
+        document.getElementById("authStatus");
+
+    status.textContent=
+        "Creating account...";
+
+    try{
+
+        const username=
+            document.getElementById(
+                "signupUsername"
+            ).value.trim();
+
+        const email=
+            document.getElementById(
+                "signupEmail"
+            ).value.trim();
+
+        const password=
+            document.getElementById(
+                "signupPassword"
+            ).value;
+
+        const displayName=
+            document.getElementById(
+                "signupDisplayName"
+            ).value.trim();
+
+        const result=
+            await playfab(
+                "RegisterPlayFabUser",
+                {
+                    Username:username,
+                    Email:email,
+                    Password:password,
+                    DisplayName:displayName,
+                    RequireBothUsernameAndEmail:false
+                }
+            );
+
+        sessionTicket=
+            result.data.SessionTicket;
+
+        await loadUser();
+
+        openApp();
+
+    }catch(error){
+
+        status.textContent=
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   USER
+===================================================== */
+
+async function loadUser(){
+
+    const result=
+        await playfab(
+            "GetPlayerCombinedInfo",
+            {
+                InfoRequestParameters:{
+                    GetUserInventory:true,
+                    GetPlayerProfile:true,
+                    GetUserAccountInfo:true
+                }
+            }
+        );
+
+    currentUser=
+        result.data;
+
+    updateRoles();
+    updateUI();
+}
+
+
+function inventory(){
+
+    return currentUser
+        ?.InfoResultPayload
+        ?.UserInventory || [];
+}
+
+
+function updateRoles(){
+
+    const ids=
+        inventory().map(
+            item=>item.ItemId
+        );
+
+    hasMODC=
+        ids.includes("MODC");
+
+    hasLIAMQ=
+        ids.includes("LIAMQ");
+
+    hasFLAME=
+        ids.includes("FLAME");
+
+    if(hasFLAME)
+        role="owner";
+    else if(hasMODC || hasLIAMQ)
+        role="moderator";
+    else
+        role="user";
+
+
+    const modNav=
+        document.getElementById("modNav");
+
+    const mobileMod=
+        document.getElementById("mobileMod");
+
+    modNav.classList.toggle(
+        "hidden",
+        role==="user"
+    );
+
+    mobileMod.classList.toggle(
+        "hidden",
+        role==="user"
+    );
+
+
+    document.getElementById(
+        "quoteTool"
+    ).classList.toggle(
+        "hidden",
+        !hasLIAMQ && !hasFLAME
+    );
+
+
+    document.getElementById(
+        "ownerTool"
+    ).classList.toggle(
+        "hidden",
+        !hasFLAME
+    );
+
+
+    const badge=
+        document.getElementById(
+            "roleBadge"
+        );
+
+    if(hasFLAME){
+
+        badge.textContent="OWNER";
+        badge.className="badge owner";
+
+    }else if(hasLIAMQ){
+
+        badge.textContent=
+            "MOD + QUOTE";
+
+        badge.className="badge quote";
+
+    }else{
+
+        badge.textContent=
+            "MODERATOR";
+
+        badge.className="badge mod";
+    }
+}
+
+
+function getProfile(){
+
+    return currentUser
+        ?.InfoResultPayload
+        ?.PlayerProfile;
+}
+
+
+function getAccount(){
+
+    return currentUser
+        ?.InfoResultPayload
+        ?.AccountInfo;
+}
+
+
+function getName(){
+
+    return getProfile()?.DisplayName ||
+           getAccount()?.Username ||
+           "Player";
+}
+
+
+function getUsername(){
+
+    return getAccount()?.Username ||
+           "player";
+}
+
+
+/* =====================================================
+   UI
+===================================================== */
+
+function updateUI(){
+
+    const name=getName();
+
+    document.getElementById(
+        "topUsername"
+    ).textContent=name;
+
+    document.getElementById(
+        "profileName"
+    ).textContent=name;
+
+    document.getElementById(
+        "profileUsername"
+    ).textContent=
+        "@"+getUsername();
+
+    document.getElementById(
+        "profileAvatar"
+    ).textContent=
+        name.charAt(0).toUpperCase();
+
+    document.getElementById(
+        "sideAccount"
+    ).innerHTML=`
+        <strong>${safe(name)}</strong>
+        <div style="color:#777;margin-top:4px">
+            @${safe(getUsername())}
+        </div>
+        <div class="badges">
+            <span class="badge">
+                ${role.toUpperCase()}
+            </span>
+        </div>
+    `;
+
+
+    const badges=
+        document.getElementById(
+            "profileBadges"
+        );
+
+    badges.innerHTML="";
+
+    if(hasMODC)
+        badges.innerHTML+=
+            '<span class="badge mod">MODERATOR</span>';
+
+    if(hasLIAMQ)
+        badges.innerHTML+=
+            '<span class="badge quote">QUOTE EDITOR</span>';
+
+    if(hasFLAME)
+        badges.innerHTML+=
+            '<span class="badge owner">OWNER</span>';
+
+
+    document.getElementById(
+        "unityQuoteLink"
+    ).value=
+        location.origin+
+        "/api/quote";
+}
+
+
+function openApp(){
+
+    document.getElementById(
+        "auth"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "app"
+    ).classList.remove("hidden");
+
+    updateUI();
+
+    showPage("home");
+
+    loadHome();
+    loadFriends();
+    loadQuote();
+}
+
+
+/* =====================================================
+   PAGES
+===================================================== */
+
+const pageNames=[
+    "Home",
+    "Friends",
+    "Search",
+    "Profile",
+    "Moderator",
+    "Settings"
+];
+
+
+function showPage(name){
+
+    pageNames.forEach(page=>{
+
+        const element=
+            document.getElementById(
+                "page"+page
+            );
+
+        if(element)
+            element.classList.add("hidden");
+    });
+
+
+    const title=
+        name.charAt(0).toUpperCase()+
+        name.slice(1);
+
+    const page=
+        document.getElementById(
+            "page"+title
+        );
+
+    if(page)
+        page.classList.remove("hidden");
+
+
+    if(name==="home")
+        loadHome();
+
+    if(name==="friends")
+        loadFriends();
+
+    if(name==="settings")
+        loadSettings();
+}
+
+
+/* =====================================================
+   HOME
+===================================================== */
+
+async function loadHome(){
+
+    document.getElementById(
+        "feed"
+    ).innerHTML=`
+        <div class="feedItem">
+
+            <div class="author">
+
+                <div class="avatar">
+                    ${safe(
+                        getName()
+                        .charAt(0)
+                        .toUpperCase()
+                    )}
+                </div>
+
+                <div>
+                    ${safe(getName())}
+
+                    <div class="feedTime">
+                        Now
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="feedText">
+                Welcome back to FlameNet!
+            </div>
+
+        </div>
+    `;
+
+
+    try{
+
+        const response=
+            await fetch(
+                API_BASE+"/news"
+            );
+
+        if(!response.ok)
+            throw new Error();
+
+        const data=
+            await response.json();
+
+        const news=
+            document.getElementById(
+                "newsFeed"
+            );
+
+        news.innerHTML="";
+
+        if(!data.news?.length){
+
+            news.innerHTML=
+                '<div style="color:#858c9c">No news yet.</div>';
+
+            return;
+        }
+
+        data.news.forEach(item=>{
+
+            news.innerHTML+=`
+                <div class="newsItem">
+
+                    <strong>
+                        ${safe(item.title)}
+                    </strong>
+
+                    <div style="
+                        color:#9ca2b0;
+                        margin-top:4px;
+                    ">
+                        ${safe(item.message)}
+                    </div>
+
+                </div>
+            `;
+        });
+
+    }catch{
+
+        document.getElementById(
+            "newsFeed"
+        ).innerHTML=
+            '<div style="color:#858c9c">News unavailable.</div>';
+    }
+}
+
+
+/* =====================================================
+   FRIENDS
+===================================================== */
+
+async function loadFriends(){
+
+    const list=
+        document.getElementById(
+            "friendsList"
+        );
+
+    list.innerHTML="Loading...";
+
+    try{
+
+        const result=
+            await playfab(
+                "GetFriendsList",
+                {
+                    IncludeSteamFriends:false
+                }
+            );
+
+        const friends=
+            result.data.Friends || [];
+
+        if(!friends.length){
+
+            list.innerHTML=
+                '<div style="color:#858c9c">No friends yet.</div>';
+
+            return;
+        }
+
+        list.innerHTML="";
+
+        friends.forEach(friend=>{
+
+            const name=
+                friend.TitleDisplayName ||
+                friend.Username ||
+                friend.FriendPlayFabId;
+
+            list.innerHTML+=`
+                <div class="userResult">
+
+                    <div class="avatar">
+                        ${safe(
+                            name
+                            .charAt(0)
+                            .toUpperCase()
+                        )}
+                    </div>
+
+                    <div class="userInfo">
+
+                        <div class="userName">
+                            ${safe(name)}
+                        </div>
+
+                        <div class="userId">
+                            ${safe(
+                                friend.FriendPlayFabId
+                            )}
+                        </div>
+
+                    </div>
+
+                </div>
+            `;
+        });
+
+    }catch(error){
+
+        list.innerHTML=
+            '<div style="color:#ed6472">'+
+            safe(error.message)+
+            '</div>';
+    }
+}
+
+
+/* =====================================================
+   SEARCH / FOLLOW
+===================================================== */
+
+async function searchUsers(){
+
+    const input=
+        document.getElementById(
+            "userSearch"
+        );
+
+    const top=
+        document.getElementById(
+            "globalSearch"
+        );
+
+    const query=
+        (
+            input?.value ||
+            top?.value ||
+            ""
+        ).trim();
+
+    if(!query)
+        return;
+
+    showPage("search");
+
+    input.value=query;
+
+    const results=
+        document.getElementById(
+            "searchResults"
+        );
+
+    results.innerHTML="Searching...";
+
+    try{
+
+        const result=
+            await playfab(
+                "GetAccountInfo",
+                {
+                    Username:query
+                }
+            );
+
+        const account=
+            result.data.AccountInfo;
+
+        const name=
+            account.TitleInfo?.DisplayName ||
+            account.Username ||
+            query;
+
+        results.innerHTML=`
+            <div class="userResult">
+
+                <div class="avatar">
+                    ${safe(
+                        name
+                        .charAt(0)
+                        .toUpperCase()
+                    )}
+                </div>
+
+                <div class="userInfo">
+
+                    <div class="userName">
+                        ${safe(name)}
+                    </div>
+
+                    <div class="userId">
+                        @${safe(
+                            account.Username || ""
+                        )}
+                    </div>
+
+                </div>
+
+                <button class="smallBtn"
+                        onclick="followUser('${safeAttr(
+                            account.PlayFabId
+                        )}')">
+                    Follow
+                </button>
+
+            </div>
+        `;
+
+    }catch{
+
+        results.innerHTML=
+            '<div style="color:#858c9c">User not found.</div>';
+    }
+}
+
+
+async function followUser(id){
+
+    try{
+
+        await playfab(
+            "AddFriend",
+            {
+                FriendPlayFabId:id
+            }
+        );
+
+        alert("Following!");
+
+        loadFriends();
+
+    }catch(error){
+
+        alert(error.message);
+    }
+}
+
+
+/* =====================================================
+   QUOTE
+===================================================== */
+
+async function loadQuote(){
+
+    try{
+
+        const response=
+            await fetch(
+                API_BASE+"/quote"
+            );
+
+        if(!response.ok)
+            return;
+
+        const data=
+            await response.json();
+
+        const quote=
+            data.quote ||
+            "Welcome to FlameNet.";
+
+        document.getElementById(
+            "sideQuote"
+        ).textContent=quote;
+
+        document.getElementById(
+            "quoteText"
+        ).value=quote;
+
+        document.getElementById(
+            "unityQuoteLink"
+        ).value=
+            location.origin+
+            "/api/quote";
+
+    }catch{}
+}
+
+
+function copyUnityLink(){
+
+    const link=
+        document.getElementById(
+            "unityQuoteLink"
+        ).value;
+
+    navigator.clipboard.writeText(link);
+
+    document.getElementById(
+        "quoteStatus"
+    ).textContent=
+        "Unity link copied!";
+}
+
+
+/* =====================================================
+   MODERATOR PANELS
+===================================================== */
+
+function openPanel(name){
+
+    [
+        "Grant",
+        "Revoke",
+        "Moderation",
+        "News",
+        "Quote",
+        "Owner"
+    ].forEach(x=>{
+
+        document
+            .getElementById(
+                "panel"+x
+            )
+            .classList.add("hidden");
+
+    });
+
+    document
+        .getElementById(
+            "panel"+
+            name.charAt(0).toUpperCase()+
+            name.slice(1)
+        )
+        .classList.remove("hidden");
+}
+
+
+/* =====================================================
+   SECURE ADMIN API
+===================================================== */
+
+async function adminAction(type){
+
+    let payload={
+        action:type,
+        sessionTicket:sessionTicket
+    };
+
+    if(type==="grantItem"){
+
+        payload.player=
+            document.getElementById(
+                "grantPlayer"
+            ).value.trim();
+
+        payload.item=
+            document.getElementById(
+                "grantItem"
+            ).value.trim();
+    }
+
+
+    if(type==="revokeItem"){
+
+        payload.player=
+            document.getElementById(
+                "revokePlayer"
+            ).value.trim();
+
+        payload.instanceId=
+            document.getElementById(
+                "revokeInstance"
+            ).value.trim();
+    }
+
+
+    if(type==="moderate"){
+
+        payload.player=
+            document.getElementById(
+                "modPlayer"
+            ).value.trim();
+
+        payload.moderationAction=
+            document.getElementById(
+                "modAction"
+            ).value;
+
+        payload.reason=
+            document.getElementById(
+                "modReason"
+            ).value.trim();
+    }
+
+
+    if(type==="news"){
+
+        payload.title=
+            document.getElementById(
+                "newsTitle"
+            ).value.trim();
+
+        payload.message=
+            document.getElementById(
+                "newsMessage"
+            ).value.trim();
+    }
+
+
+    if(type==="quote"){
+
+        payload.quote=
+            document.getElementById(
+                "quoteText"
+            ).value.trim();
+    }
+
+
+    const statusId={
+        grantItem:"grantStatus",
+        revokeItem:"revokeStatus",
+        moderate:"modStatus",
+        news:"newsStatus",
+        quote:"quoteStatus"
+    }[type];
+
+    const status=
+        document.getElementById(
+            statusId
+        );
+
+    status.textContent=
+        "Working...";
+
+    try{
+
+        const response=
+            await fetch(
+                API_BASE+"/admin",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify(payload)
+                }
+            );
+
+        const data=
+            await response.json();
+
+        if(!response.ok)
+            throw new Error(
+                data.error ||
+                "Action failed."
+            );
+
+        status.textContent=
+            "Done!";
+
+        if(type==="quote")
+            loadQuote();
+
+        if(type==="news")
+            loadHome();
+
+    }catch(error){
+
+        status.textContent=
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   OWNER
+===================================================== */
+
+async function ownerAction(action){
+
+    const status=
+        document.getElementById(
+            "ownerStatus"
+        );
+
+    status.textContent="Working...";
+
+    try{
+
+        const response=
+            await fetch(
+                API_BASE+"/admin",
+                {
+                    method:"POST",
+                    headers:{
+                        "Content-Type":
+                            "application/json"
+                    },
+                    body:JSON.stringify({
+                        action:action,
+                        sessionTicket:sessionTicket
+                    })
+                }
+            );
+
+        const data=
+            await response.json();
+
+        if(!response.ok)
+            throw new Error(
+                data.error ||
+                "Owner action failed."
+            );
+
+        status.textContent=
+            "Done!";
+
+    }catch(error){
+
+        status.textContent=
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   SETTINGS
+===================================================== */
+
+function loadSettings(){
+
+    document.getElementById(
+        "settingsName"
+    ).value=getName();
+
+    document.getElementById(
+        "settingsBio"
+    ).value=
+        currentUser
+        ?.InfoResultPayload
+        ?.UserData
+        ?.Bio
+        ?.Value || "";
+}
+
+
+async function saveSettings(){
+
+    const status=
+        document.getElementById(
+            "settingsStatus"
+        );
+
+    status.textContent="Saving...";
+
+    try{
+
+        const name=
+            document.getElementById(
+                "settingsName"
+            ).value.trim();
+
+        const bio=
+            document.getElementById(
+                "settingsBio"
+            ).value.trim();
+
+        await playfab(
+            "UpdateUserTitleDisplayName",
+            {
+                DisplayName:name
+            }
+        );
+
+        await playfab(
+            "UpdateUserData",
+            {
+                Data:{
+                    Bio:bio
+                },
+                Permission:"public"
+            }
+        );
+
+        await loadUser();
+
+        status.textContent=
+            "Saved!";
+
+    }catch(error){
+
+        status.textContent=
+            error.message;
+    }
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+function logout(){
+
+    sessionTicket=null;
+    currentUser=null;
+
+    document.getElementById(
+        "app"
+    ).classList.add("hidden");
+
+    document.getElementById(
+        "auth"
+    ).classList.remove("hidden");
+
+    document.getElementById(
+        "loginPassword"
+    ).value="";
+
+    showAuth("login");
+}
+
+
+/* =====================================================
+   SECURITY HELPERS
+===================================================== */
+
+function safe(value){
+
+    return String(value??"")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+
+function safeAttr(value){
+
+    return String(value??"")
+        .replaceAll("\\","\\\\")
+        .replaceAll("'","\\'");
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+window.addEventListener(
+    "load",
+    ()=>{
+        showAuth("login");
+    }
+);
+</script>
+
+</body>
+</html>
+
+```
